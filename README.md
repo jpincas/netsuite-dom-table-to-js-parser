@@ -1,0 +1,1 @@
+Some simple Javascript code to help with parsing out line-level and transaction-level details from cart tables in Netsuite generated webpages, mainly in order to ping Google Analytics with useful events.
