@@ -102,13 +102,16 @@ function ga(action, p1, p2){
 	console.log("Google Analytics Action Emitted: ", p1, p2);
 }
 
-parseTable('cart', function(line){
-	ga('ec:addProduct', line);
-}, function(transaction){
-	ga('ec:setAction', 'checkout', {
-            'step': 1       // A value of 1 indicates this action is first checkout step.
-        });
+var result = parseTable('cart');
+
+for (i=0; i < result.lines.length; i++){
+	ga('ec:addProduct', result.lines[i]);
+}
+
+ga('ec:setAction', 'checkout', {
+    'step': 1       // A value of 1 indicates this action is first checkout step.
 });
+
 
 </script>
 

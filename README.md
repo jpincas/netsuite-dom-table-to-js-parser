@@ -11,18 +11,17 @@ As you might expect, the cart tables are subtly different depending on where the
 ##Usage
 
 ```javascript
-parseTable(step, lineCallback, transactionCallback) 
+parseTable(step) 
 //where step = 'cart', 'checkout' or 'purchase'
-//lineCallback is called for each line in the cart, with a single object parameter representing the line
-//transactionCallback is called at the end, with a single object parameter representing the overall transaction
-//Use these callbacks to trigger your analytics events
-//for example,
 
-parseTable('purchase', function(line){
-	ga('ec:addProduct', line);
-}, function(transaction){
-	ga('ec:setAction', 'purchase', transaction);
-});
+
+var result = parseTable('purchase');
+
+for (i=0; i < result.lines.length; i++){
+	ga('ec:addProduct', result.lines[i]);
+}
+
+ga('ec:setAction', 'purchase', result.transaction);
 
 ```
 

@@ -127,11 +127,15 @@ function ga(action, p1, p2){
 	console.log("Google Analytics Action Emitted: ", p1, p2);
 }
 
-parseTable('purchase', function(line){
-	ga('ec:addProduct', line);
-}, function(transaction){
-	  ga('ec:setAction', 'purchase', transaction);
-});
+var result = parseTable('purchase');
+
+for (i=0; i < result.lines.length; i++){
+	ga('ec:addProduct', result.lines[i]);
+}
+
+ga('ec:setAction', 'purchase', result.transaction);
+
+
 </script>
 
 

@@ -3,7 +3,9 @@
 
 //Parses the Netsuite table, isolating each row, building an object with the line data, and emitting
 //and analytics event with that object. 
-function parseTable(step, lineCallback, transactionCallback) {
+function parseTable(step) {
+
+    var lines = [];
 
     //Isolate the rows
     var rows = document.getElementById('carttable').getElementsByTagName('tr');
@@ -45,17 +47,16 @@ function parseTable(step, lineCallback, transactionCallback) {
                 'quantity': qty,
             }
 
-            //Trigger the 'line analytics' callback
+            //Add to the lines array
             if (line) {
-                lineCallback(line);
+                lines.push(line);
             }
 
         }
 
     }
 
-    //Return overall transaction values
-
+    //Build overall transaction values
      var transaction = {
         'revenue': 0,
         'shipping': 0,
@@ -97,7 +98,9 @@ function parseTable(step, lineCallback, transactionCallback) {
 
     }
 
-    //Trigger the 'transaction-level analytics' callback
-    transactionCallback(transaction);
+    return {
+        "lines": lines,
+        "transaction": transaction
+    }
 
 }
