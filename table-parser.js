@@ -3,83 +3,101 @@
 
 //Parses the Netsuite table, isolating each row, building an object with the line data, and emitting
 //and analytics event with that object. 
-function parseTable(tableName) {
+function parseTable(step, lineCallback, transactionCallback) {
 
     //Isolate the rows
-    var rows = document.getElementById(tableName).getElementsByClassName('uir-list-row-tr');
+    var rows = document.getElementById('carttable').getElementsByTagName('tr');
 
     //Loop over the rows
     for (i = 0; i < rows.length; i++) {
 
-        //Extraction of the sku is slightly complicated by the fact that it is wrapped in link
-        var skuCell = rows[i].getElementsByClassName('carttablecellproductname')[0];
-        var sku = skuCell.getElementsByTagName('a')[0].innerHTML;
+        //Filter out the header row at the top and summary rows at the bototm
+        var rowId = rows[i].id;
+        if (rowId.match("carttablerow") && rowId != "carttablerowtotal" ) {
 
-        //Process the price to deliver it as a clean 2dp decimal
-        var priceText = rows[i].getElementsByClassName('carttablecellrate')[0].innerHTML;
-        var price = parseFloat(priceText.substring(1, (priceText.length)));
+            //The SKU is sometimes wrapped in a link
+            var skuCell = rows[i].getElementsByClassName('carttablecellproductname')[0];          
+            if (skuCell.getElementsByTagName('a').length){
+                var sku = skuCell.getElementsByTagName('a')[0].innerHTML;
+            } else {
+                var sku = skuCell.innerHTML;
+            }
 
-        //Parse the quantity to deliver as an int
-        var qtyText = rows[i].getElementsByClassName('carttablecellqty')[0].innerHTML;
-        var qty = parseInt(qtyText);
+            //Process the price to deliver it as a clean 2dp decimal
+            var priceText = rows[i].getElementsByClassName('carttablecellrate')[0].innerHTML;
+            var price = parseFloat(priceText.substring(1, (priceText.length)));
+
+            //The qty may be in an input field
+            var qtyText = rows[i].getElementsByClassName('carttablecellqty')[0];
+            if (qtyText.getElementsByTagName('input').length){
+                var qtyText = qtyText.getElementsByTagName('input')[0].value;
+            } else {
+                var qtyText = qtyText.innerHTML;
+            }
+            var qty = parseInt(qtyText);
 
 
-        //Build the data object for the line
-        var line = {
-            'id': sku,
-            'name': rows[i].getElementsByClassName('carttablecellproductdesc')[0].innerHTML,
-            'price': price,
-            'quantity': qty,
-        }
+            //Build the data object for the line
+            var line = {
+                'id': sku,
+                'name': rows[i].getElementsByClassName('carttablecellproductdesc')[0].innerHTML,
+                'price': price,
+                'quantity': qty,
+            }
 
-        //Emit the line to analytics
-        if (line) {
-            emitLine(line);
+            //Trigger the 'line analytics' callback
+            if (line) {
+                lineCallback(line);
+            }
+
         }
 
     }
 
     //Return overall transaction values
 
-    var revenueText = (document.getElementById("ordersummary_itemtotal").getElementsByClassName("carttablecellamount")[0].innerHTML);
-    var revenue = parseFloat(revenueText.substring(1, (revenueText.length)));
+     var transaction = {
+        'revenue': 0,
+        'shipping': 0,
+        'tax': 0
+    }
+    
+    //The structure of the transaction summary lines is slightly different at each step
+    if (step == "cart") {
 
-    var taxText = (document.getElementById("ordersummary_tax").getElementsByClassName("carttablecellamount")[0].innerHTML);
-    var tax = parseFloat(taxText.substring(1, (revenueText.length)));
+        var revenueText = (document.getElementById("carttablerowtotal").getElementsByClassName("carttablecellamount")[0].innerHTML);
+        transaction.revenue = parseFloat(revenueText.substring(1, (revenueText.length)));
 
-    var shippingText = (document.getElementById("ordersummary_shipping").getElementsByClassName("carttablecellamount")[0].innerHTML);
-    var shipping = parseFloat(shippingText.substring(1, (revenueText.length)));
+        var taxText = (document.getElementById("carttablerowtotal").getElementsByClassName("carttablecelltax")[0]);
+        //In the cart, Tax text is wrapped in a <b> tag, so strip that out
+        taxText = taxText.getElementsByTagName("b")[0].innerHTML;
+        transaction.tax = parseFloat(taxText.substring(1, (taxText.length)));
 
-    return {
-        'revenue': revenue,
-        'shipping': shipping,
-        'tax': tax
+    } else if (step == "checkout") {
+
+        var revenueText = (document.getElementById("ordersummary_itemtotal").getElementsByClassName("carttablecellamount")[0].innerHTML);
+        transaction.revenue = parseFloat(revenueText.substring(1, (revenueText.length)));
+
+        var taxText = (document.getElementById("ordersummary_tax").getElementsByClassName("carttablecellamount")[0].innerHTML);
+        transaction.tax = parseFloat(taxText.substring(1, (taxText.length)));
+
+        var shippingText = (document.getElementById("ordersummary_shipping").getElementsByClassName("carttablecellamount")[0].innerHTML);
+        transaction.shipping = parseFloat(shippingText.substring(1, (shippingText.length)));
+
+    } else if (step = "purchase"){
+
+        var revenueText = (document.getElementById("ordersummary_subtotal").getElementsByClassName("carttablecellamount")[0].innerHTML);
+        transaction.revenue = parseFloat(revenueText.substring(1, (revenueText.length)));
+
+        var taxText = (document.getElementById("ordersummary_Tax").getElementsByClassName("carttablecellamount")[0].innerHTML);
+        transaction.tax = parseFloat(taxText.substring(1, (taxText.length)));
+
+        var shippingText = (document.getElementById("ordersummary_shipping").getElementsByClassName("carttablecellamount")[0].innerHTML);
+        transaction.shipping = parseFloat(shippingText.substring(1, (shippingText.length)));
+
     }
 
-}
-
-//Called for each line on the transaction, use to emit a line level analytics event
-function emitLine(line) {
-
-    ga('ec:addProduct', line);
-
-}
-
-function processAnalytics(step) {
-
-    //Parse the table, emitting lines and returning the overall transaction data
-    var transaction = parseTable('carttable');
-    //Emit the transaction
-    if (step == "checkout1") {
-        ga('ec:setAction', 'checkout', {
-            'step': 1       // A value of 1 indicates this action is first checkout step.
-        });
-    } else if (step == "checkout2") {
-        ga('ec:setAction', 'checkout', {
-            'step': 1       // A value of 1 indicates this action is first checkout step.
-        });
-    } else if (step == "purchase") {
-        ga('ec:setAction', 'purchase', transaction);
-    }
+    //Trigger the 'transaction-level analytics' callback
+    transactionCallback(transaction);
 
 }

@@ -1,0 +1,140 @@
+<html>
+
+<body>
+
+    <h1>Example 'Thanks for Order' Page</h1>
+
+    <table id="carttable" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr id="carttableheader">
+                <td class="smalltext" width="8.34%" align="LEFT">
+                    <div class="listheadernosort">Item Name/Code</div>
+                </td>
+                <td class="smalltext" width="5.42%" align="LEFT">
+                    <div class="listheadernosort">Qty</div>
+                </td>
+                <td class="smalltext" width="29.79%" align="LEFT">
+                    <div class="listheadernosort">Description</div>
+                </td>
+                <td class="smalltext" width="9.93%" align="RIGHT">
+                    <div class="listheadernosort">Rate</div>
+                </td>
+                <td class="smalltext" width="13.34%" align="RIGHT">
+                    <div class="listheadernosort">Amount</div>
+                </td>
+                <td class="smalltext" width="9.93%" align="RIGHT">
+                    <div class="listheadernosort">Tax</div>
+                </td>
+                <td class="smalltext" width="8.34%" align="RIGHT">
+                    <div class="listheadernosort">Gross Amount</div>
+                </td>
+                <td class="smalltext" width="14.91%" align="LEFT">
+                    <div class="listheadernosort">Options</div>
+                </td>
+            </tr>
+            <tr id="carttablerow0">
+                <td class="texttable carttablecellproductname">GAR3801</td>
+                <td class="texttablectr carttablecellqty">5</td>
+                <td class="texttable carttablecellproductdesc">Enamelled Steel Paella Pan 38 cm</td>
+                <td class="texttablert carttablecellrate">£10.08</td>
+                <td class="texttablert carttablecellamount">£50.40</td>
+                <td class="texttablert carttablecelltax">£10.08</td>
+                <td class="texttablert carttablecellgrossamount">£60.48</td>
+                <td class="texttable carttablecelloptions">
+                    <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                        <tbody>
+                            <tr>
+                                <td class="bglttext">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr id="carttablerow1">
+                <td class="texttable carttablecellproductname">NUD5575</td>
+                <td class="texttablectr carttablecellqty">2</td>
+                <td class="texttable carttablecellproductdesc">Piquillo Peppers Salad, Easy Open 390 g. Tin.</td>
+                <td class="texttablert carttablecellrate">£1.80</td>
+                <td class="texttablert carttablecellamount">£3.60</td>
+                <td class="texttablert carttablecelltax">£0.00</td>
+                <td class="texttablert carttablecellgrossamount">£3.60</td>
+                <td class="texttable carttablecelloptions">
+                    <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                        <tbody>
+                            <tr>
+                                <td class="bglttext">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr id="carttablerow2">
+                <td class="texttable carttablecellproductname">JOS4502</td>
+                <td class="texttablectr carttablecellqty">6</td>
+                <td class="texttable carttablecellproductdesc">Quesada Pasiega (Cantabrian Butter Cake) 450 g</td>
+                <td class="texttablert carttablecellrate">£3.56</td>
+                <td class="texttablert carttablecellamount">£21.36</td>
+                <td class="texttablert carttablecelltax">£0.00</td>
+                <td class="texttablert carttablecellgrossamount">£21.36</td>
+                <td class="texttable carttablecelloptions">
+                    <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                        <tbody>
+                            <tr>
+                                <td class="bglttext">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr id="ordersummary_subtotal">
+                <td class="texttablert carttablecelllabel" colspan="4">Subtotal</td>
+                <td class="texttablert carttablecellamount">£75.36</td>
+                <td class="texttable">&nbsp;</td>
+                <td class="texttable">&nbsp;</td>
+                <td class="texttable carttablecelloptions">&nbsp;</td>
+            </tr>
+            <tr id="ordersummary_shipping">
+                <td class="texttablert carttablecelllabel" colspan="4">Shipping &amp; Handling</td>
+                <td class="texttablert carttablecellamount">£45.86</td>
+                <td class="texttable">&nbsp;</td>
+                <td class="texttable">&nbsp;</td>
+                <td class="texttable carttablecelloptions">&nbsp;</td>
+            </tr>
+            <tr id="ordersummary_Tax">
+                <td class="texttablert carttablecelllabel" colspan="4">VAT</td>
+                <td class="texttablert carttablecellamount">£16.21</td>
+                <td class="texttable">&nbsp;</td>
+                <td class="texttable">&nbsp;</td>
+                <td class="texttable carttablecelloptions">&nbsp;</td>
+            </tr>
+            <tr id="ordersummary_total">
+                <td class="texttablert carttablecelllabel" colspan="4"><b>Total</b></td>
+                <td class="texttablert carttablecellamount"><b>£137.43</b></td>
+                <td class="texttable">&nbsp;</td>
+                <td class="texttable">&nbsp;</td>
+                <td class="texttable carttablecelloptions">&nbsp;</td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="table-parser.js"></script>
+    <script>
+
+//Google analytics override for testing.
+
+function ga(action, p1, p2){
+	console.log("Google Analytics Action Emitted: ", p1, p2);
+}
+
+parseTable('purchase', function(line){
+	ga('ec:addProduct', line);
+}, function(transaction){
+	  ga('ec:setAction', 'purchase', transaction);
+});
+</script>
+
+
+</body>
+
+</html>
