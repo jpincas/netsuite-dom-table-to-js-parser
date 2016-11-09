@@ -148,7 +148,7 @@ function addToCart() {
 Now you just have to trigger the 'Add to Cart' function when the product is added to the cart, which is easier said than done.  You're going to have to customise your 'Add to Cart' button, which is in your 'Web Site Theme', on the 'Tabs and Button' tab.  Find the 'Add to Cart' button code, and slip the following snippet into the INPUT tag:
 
 ```javascript
-onclick="preCartAdd();
+onclick="preCartAdd();"
 ```
 
 Now go back to your drilldown template, and in the 'Addition to HEAD' section add this snippet:
