@@ -42,7 +42,7 @@ Put this code at the TOP of your list template(s):
     ga('create', 'UA-xxxxxxxxx', 'auto');  //Set to your analytics account
     ga('require', 'ec');
     ga('require', 'linker');
-    ga('linker:autoLink', [ 'yourmaindomain.com, 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
+    ga('linker:autoLink', [ 'yourmaindomain.com', 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
 
     var customerId = "<%=getCurrentAttribute('customer', 'internalid')%>";
     if (customerId) {
@@ -109,7 +109,7 @@ Place this code AT THE TOP of the drilldown template (in the 'Addition to HEAD' 
   ga('create', 'UA-xxxxxxxxx', 'auto');
   ga('require', 'ec');
 ga('require', 'linker');
-  ga('linker:autoLink', [ 'yourmaindomain.com, 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
+  ga('linker:autoLink', [ 'yourmaindomain.com', 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
 
   var customerId = "<%=getCurrentAttribute('customer', 'internalid')%>";
     if (customerId) {
@@ -184,7 +184,7 @@ In the MESSAGE HTML box (not the 'Greeting' - if you put it in the Greeting it w
   ga('create', 'UA-xxxxxxx', 'auto');
   ga('require', 'ec');
 ga('require', 'linker');
-  ga('linker:autoLink', [ 'yourmaindomain.com, 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
+  ga('linker:autoLink', [ 'yourmaindomain.com', 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
 
   var customerId = "<%=getCurrentAttribute('customer', 'internalid')%>";
     if (customerId) {
@@ -226,7 +226,7 @@ In 'Place Order Message':
   ga('create', 'UA-xxxxxxxxx', 'auto');
   ga('require', 'ec');
 ga('require', 'linker');
-  ga('linker:autoLink', [ 'yourmaindomain.com, 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
+  ga('linker:autoLink', [ 'yourmaindomain.com', 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
 
   var customerId = "<%=getCurrentAttribute('customer', 'internalid')%>";
     if (customerId) {
@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   ga('create', 'UA-xxxxxxx', 'auto');
   ga('require', 'ec');
 ga('require', 'linker');
-    ga('linker:autoLink', [ 'yourmaindomain.com, 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
+    ga('linker:autoLink', [ 'yourmaindomain.com', 'yournetsuitecheckoutdomain.com' ]); //Set to your domains
 
   var customerId = "<%=getCurrentAttribute('customer', 'internalid')%>";
     if (customerId) {
