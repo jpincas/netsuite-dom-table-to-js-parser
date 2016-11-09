@@ -1,4 +1,4 @@
-#Cart Table Parsing for Netsuite Generated E-Commerce Page
+#Cart Table Parsing for Netsuite Generated E-Commerce Pages
 
 ##Summary
 
@@ -26,7 +26,12 @@ ga('ec:setAction', 'purchase', result.transaction);
 ```
 
 ##Examples
+
 Check out cart.html, checkout.html and purchase.html for example tables - check the the console in dev tools to see the line and transaction level analytics events being logged to the console.
+
+##How to Install Google Analytics for Enhanced Ecommerce in Netsuite Sites
+
+I've included a more thorough guide to the complate installation procedure in HOW_TO_SETUP.md.  Warning: it's messy.
 
 ##Disclaimer
 
